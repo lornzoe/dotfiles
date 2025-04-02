@@ -14,3 +14,5 @@ source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 # config for ruby
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
+
+alias source-waybar="pkill waybar && waybar &"
