@@ -5,7 +5,9 @@
 	"height": 35, // (Remove for auto height)
 	// Modules
 	"modules-left": [
-	  "wlr/taskbar"
+	//  "wlr/taskbar",
+	  "hyprland/workspaces",
+	  "hyprland/window"
 	],
 	"modules-center": [
 	  "clock"
@@ -29,6 +31,26 @@
 		"org.pwmt.zathura": "zathura",
 		"com.github.johnfactotum.Foliate": "foliate"
 	  }
+	},
+	"hyprland/workspaces": {
+	"format": "{icon}",
+	"format-icons": {
+		"1": "",
+		"3": "",
+		"active": "",
+		"default": ""
+	},
+       "persistent-workspaces": {
+             "DP-5": [1, 2, 3] // 5 workspaces by default on every monitor
+       }
+	},
+	"hyprland/window": {
+    "format": " {title}",
+    "rewrite": {
+        "(.*) — Mozilla Firefox": "🌎 $1",
+        "(.*) - fish": "> [$1]"
+    },
+    "separate-outputs": true
 	},
 	"tray": {
 	  "icon-size": 16,

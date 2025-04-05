@@ -15,4 +15,4 @@ source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 
-alias source-waybar="pkill waybar && waybar &"
+[ -f ~/.zsh_aliases ] && source ~/.zsh_aliases

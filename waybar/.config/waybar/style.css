@@ -18,7 +18,7 @@
 @define-color red1 #FB4934;
 
 * {
-    font-family: Hack Nerd Font,sans-serif;
+    font-family: Hack Nerd Font Propo,sans-serif;
     font-size: 14px;
     border-radius: 5px;
     border: none;
@@ -65,26 +65,32 @@ button {
  *                  Workspaces
  * ----------------------------------------------------- */
 
-#taskbar {
+#taskbar,
+#workspaces {
     background-color: @bg0_h;
-    padding: 0px 0px;
+    padding: 0px 2px;
     margin: 2px 2px 2px 2px;
+
 }
 
-#taskbar button {
-    min-width: 20px;
+#taskbar button,
+#workspaces button {
+	min-width: 25px;
     color: @red;
     font-weight: normal;
-    padding: 0px 0px 0px 5px;
-    margin: 3px 3px 3px 3px;
+    padding: 0px 5px 0px 6px;
+    margin: 2px 2px;
+
 }
 
-#taskbar button.active {
+#taskbar button.active,
+#workspaces button.active {
     color: @red1;
     background-color: @bg;
 }
 
-#taskbar button:hover {
+#taskbar button:hover,
+#workspaces button:hover {
     background-color: @bg1;
 }
 

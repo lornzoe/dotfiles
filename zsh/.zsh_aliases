@@ -1,0 +1,1 @@
+alias colours='for i in {0..255}; do print -Pn "%K{$i}  %k%F{$i}$(printf "%03d" $i)%f "; (( (i + 1) % 6 == 0 )) && echo; done'
