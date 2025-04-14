@@ -123,7 +123,8 @@ button {
     margin: 2px 2px 2px 2px;
 }
 
-#clock {
+#clock,
+#custom-clock {
     background-color: @bg0_h;
     color: @orange;
     padding: 0px 15px;

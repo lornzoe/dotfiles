@@ -10,7 +10,7 @@
 	  "hyprland/window"
 	],
 	"modules-center": [
-	  "clock"
+	  "custom/clock"
 	],
 	"modules-right": [
 	  "tray",
@@ -120,5 +120,11 @@
 		"on-scroll-down": "shift_down"
 	  },
 	  "tooltip": true
-	}
+	},
+"custom/clock": {
+  "exec": "~/.config/waybar/scripts/lowercase-clock.js",
+  "return-type": "json",
+  "format": "{}",
+  "tooltip": true
+}
   }
