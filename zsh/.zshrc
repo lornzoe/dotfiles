@@ -16,3 +16,5 @@ source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 export PATH="$PATH:$HOME/.rvm/bin"
 
 [ -f ~/.zsh_aliases ] && source ~/.zsh_aliases
+# Created by `pipx` on 2025-06-02 11:19:39
+export PATH="$PATH:/home/nzoe/.local/bin"
