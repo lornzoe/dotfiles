@@ -22,3 +22,8 @@ ddir() { nohup dolphin "${@:-.}" > /dev/null 2>&1 & disown; exit; }
 
 # Created by `pipx` on 2025-06-02 11:19:39
 export PATH="$PATH:/home/nzoe/.local/bin"
+
+# For pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
