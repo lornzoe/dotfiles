@@ -27,3 +27,8 @@ export PATH="$PATH:/home/nzoe/.local/bin"
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
+
+# manual waydroid fix.
+waydroid() {
+    /usr/bin/python3 /usr/bin/waydroid "$@"
+}

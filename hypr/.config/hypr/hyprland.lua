@@ -311,3 +311,12 @@ hl.window_rule({
     no_screen_share = true,
     match = { initial_class= "steam_app_1590600"}
 })
+
+hl.window_rule({
+    float = true,
+    match = {
+        initial_class="^(Waydroid)$"
+    },
+    persistent_size = true,
+    size = {800, 1280},
+})
