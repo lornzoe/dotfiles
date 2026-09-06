@@ -8,7 +8,7 @@ REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BACKUP="$HOME/.config-backup-$(date +%Y%m%d-%H%M%S)"
 
 PKGS=("$@")
-[ ${#PKGS[@]} -eq 0 ] && PKGS=(hypr waybar wofi kitty btop walker elephant)
+[ ${#PKGS[@]} -eq 0 ] && PKGS=(hypr waybar kitty btop walker elephant)
 
 for pkg in "${PKGS[@]}"; do
     src="$REPO/$pkg/.config/$pkg"

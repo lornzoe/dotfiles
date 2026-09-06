@@ -24,10 +24,7 @@ require("workspace")
 local terminal    = "kitty"
 local fileManager = "dolphin"
 
--- walker is AUR and not installed on this machine yet; wofi is in the repos
--- and is already installed, so it is the fallback for both the app launcher
--- and the dmenu-style scripts. Drop the fallback once walker is in.
-local menu        = "sh -c 'command -v walker >/dev/null 2>&1 && walker || wofi --show drun'"
+local menu        = "walker"
 
 ---------------------
 ----   SCRIPTS   ----

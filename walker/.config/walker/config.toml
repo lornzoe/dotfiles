@@ -5,7 +5,11 @@ single_click_activation = true  # activate items with a single click opposed to 
 selection_wrap = false          # wrap list if at bottom or top
 global_argument_delimiter = "#" # query: firefox#https://benz.dev => part after delimiter will be ignored when querying. this should be the same as in the elephant config
 exact_search_prefix = "'"       # disable fuzzy searching
-theme = "default"               # theme to use
+theme = "kanagawa"              # ~/.config/walker/themes/kanagawa
+                                # Only style.css, layout.xml and item_calc.xml
+                                # are overridden; every other item_*.xml is
+                                # inherited from walker's built-in default
+                                # theme (/etc/xdg/walker/themes/default).
 disable_mouse = false           # disable mouse (on input and list only)
 debug = false                   # enables debug printing for some stuff, f.e. keybinds
 page_jump_items = 10            # number of items to skip with Page Up/Down

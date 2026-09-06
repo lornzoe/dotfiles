@@ -61,7 +61,6 @@ dotfiles/
     │   │   ├── config.jsonc.tmpl         # battery module, persistent ws
     │   │   ├── style.css
     │   │   └── scripts/executable_*.sh
-    │   ├── wofi/style.css
     │   ├── kitty/{kitty.conf,current-theme.conf}
     │   ├── btop/…
     │   ├── walker/…
@@ -224,7 +223,7 @@ git switch -c chezmoi-migration
 mkdir -p home/dot_config
 
 # 3. move each stow package (git mv keeps history)
-for p in hypr waybar wofi kitty btop walker elephant; do
+for p in hypr waybar kitty btop walker elephant; do
     git mv "$p/.config/$p" "home/dot_config/$p"
     rmdir "$p/.config" "$p"
 done
@@ -263,7 +262,7 @@ sudo pacman -S --needed chezmoi
 
 # tear down the stow symlinks first -- chezmoi will not write through a
 # symlink pointing back into the repo, and you get confusing no-op applies
-for d in hypr waybar wofi kitty btop walker elephant; do
+for d in hypr waybar kitty btop walker elephant; do
     [ -L "$HOME/.config/$d" ] && rm "$HOME/.config/$d"
 done
 

@@ -50,7 +50,18 @@ hl.on("hyprland.start", function()
     -- Bar / launcher
     ----------------------------------------------------------------
     run_if("waybar")
-    run_if("elephant")                                  -- walker's backend daemon
+
+    -- elephant is walker's backend daemon and must be up before walker is
+    -- useful. Recent elephant releases ship a systemd user unit; prefer it so
+    -- the daemon survives a compositor restart, and fall back to a bare exec.
+    hl.exec_cmd([==[
+        if systemctl --user cat elephant.service >/dev/null 2>&1; then
+            systemctl --user start elephant.service
+        elif command -v elephant >/dev/null 2>&1; then
+            elephant &
+        fi
+    ]==])
+
     run_if("walker", "walker --gapplication-service")
     run_if("hyprswitch", "hyprswitch init")
 

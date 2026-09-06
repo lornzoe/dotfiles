@@ -29,11 +29,7 @@ menu() {
   local extra="$3"
   
   # Note: Removed Omarchy specific styling flags to ensure compatibility
-  if command -v walker >/dev/null 2>&1; then
-    echo -e "$options" | walker --dmenu -p "$prompt" $extra 2>/dev/null
-  else
-    echo -e "$options" | wofi --dmenu --prompt "$prompt" $extra 2>/dev/null
-  fi
+  echo -e "$options" | walker --dmenu -p "$prompt" $extra 2>/dev/null
 }
 
 # Launch a command in the terminal
@@ -61,7 +57,7 @@ show_main_menu() {
   
   case "${choice,,}" in
     *capture*) show_capture_menu ;;
-    *apps*) command -v walker >/dev/null 2>&1 && walker || wofi --show drun ;;
+    *apps*) walker ;;
     *setup*) show_setup_menu ;;
     *keybindings*) open_in_editor "$HOME/.config/hypr/hyprland.lua" ;; # Adjust path if needed
     *system*) show_system_menu ;;
