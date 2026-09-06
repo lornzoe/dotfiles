@@ -14,7 +14,7 @@
 	],
 	"modules-right": [
 		"tray",
-		"battery",
+		// "battery",  // desktop has no battery; re-enable on the G14
 		"cpu",
 		"memory",
 		"custom/sidetonedevice",
@@ -23,17 +23,6 @@
 		"network"
 	],
 	// Modules configuration
-	"wlr/taskbar": {
-		"format": "{icon}",
-		"icon-size": 16,
-		"icon-theme": "Gruvbox Plus Dark",
-		"on-click": "minimize-raise",
-		"app_ids-mapping": {
-			"org.gnome.FileRoller": "FileRoller",
-			"org.pwmt.zathura": "zathura",
-			"com.github.johnfactotum.Foliate": "foliate"
-		}
-	},
 	"hyprland/workspaces": {
 		"format": "{icon}",
 		"format-icons": {
@@ -43,11 +32,8 @@
 			"default": ""
 		},
 		"persistent-workspaces": {
-			"DP-5": [
-				1,
-				2,
-				3
-			] // 5 workspaces by default on every monitor
+			"DP-5": [1, 2, 3],
+			"HDMI-A-2": [4]
 		}
 	},
 	"hyprland/window": {
@@ -94,8 +80,10 @@
 		"tooltip-format": "{ipaddr}\n<b>up:</b> {bandwidthUpBytes} <b>down:</b> {bandwidthDownBytes}",
 		"format-linked": "{ifname} (No IP) ?",
 		"format-disconnected": "No connection",
-		"on-click": "networkmanager_dmenu",
-		"on-click-right": "$TERMINAL -a floatterm -e nethogs"
+		// NetworkManager is not installed on this box (iwd is), so
+		// networkmanager_dmenu / nm-connection-editor are unavailable.
+		"on-click": "kitty --title floatterm -e iwctl",
+		"on-click-right": "kitty --title floatterm -e htop"
 	},
 	"wireplumber": {
 		"format": "{icon} : {volume}%",
@@ -128,7 +116,8 @@
 		"tooltip": true
 	},
 	"custom/clock": {
-		"exec": "~/.config/waybar/scripts/lowercase-clock.js",
+		"exec": "~/.config/waybar/scripts/lowercase-clock.sh",
+		"interval": 30,
 		"return-type": "json",
 		"format": "{}",
 		"tooltip": true

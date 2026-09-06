@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # CAPTURE="alsa_input.usb-C-Media_Electronics_Inc._USB_Advanced_Audio_Device-00.analog-stereo"
-CAPTURE=$(cat "$HOME/.config/waybar/sidetone_device.state")
+STATE_FILE="$HOME/.config/waybar/sidetone_device.state"
+DEFAULT_CAPTURE="alsa_input.usb-Generic_USB_Audio-00.HiFi__Mic__source"
+[ -r "$STATE_FILE" ] && CAPTURE=$(cat "$STATE_FILE") || CAPTURE="$DEFAULT_CAPTURE"
 PLAYBACK="alsa_output.usb-Generic_USB_Audio-00.HiFi__Speaker__sink"
 
 # Check if pw-loopback is running

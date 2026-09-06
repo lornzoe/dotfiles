@@ -3,7 +3,8 @@
 # --- CONFIGURATION ---
 # Change these to match your preferred apps
 TERMINAL="kitty"
-EDITOR="nvim"
+# neovim is not installed yet; fall back to vim, which is.
+EDITOR="$(command -v nvim || command -v vim || echo nano)"
 BROWSER="zen-browser"
 FILE_MANAGER="dolphin"
 
@@ -28,7 +29,11 @@ menu() {
   local extra="$3"
   
   # Note: Removed Omarchy specific styling flags to ensure compatibility
-  echo -e "$options" | walker --dmenu -p "$prompt" $extra 2>/dev/null
+  if command -v walker >/dev/null 2>&1; then
+    echo -e "$options" | walker --dmenu -p "$prompt" $extra 2>/dev/null
+  else
+    echo -e "$options" | wofi --dmenu --prompt "$prompt" $extra 2>/dev/null
+  fi
 }
 
 # Launch a command in the terminal
@@ -56,9 +61,9 @@ show_main_menu() {
   
   case "${choice,,}" in
     *capture*) show_capture_menu ;;
-    *apps*) walker ;; # Launch standard Walker app drawer
+    *apps*) command -v walker >/dev/null 2>&1 && walker || wofi --show drun ;;
     *setup*) show_setup_menu ;;
-    *keybindings*) open_in_editor "$HOME/.config/hypr/hyprland.conf" ;; # Adjust path if needed
+    *keybindings*) open_in_editor "$HOME/.config/hypr/hyprland.lua" ;; # Adjust path if needed
     *system*) show_system_menu ;;
   esac
 }
@@ -81,7 +86,7 @@ show_setup_menu() {
     *Wi-Fi*) nm-connection-editor ;; # Or use 'nmtui' if you prefer terminal
     *Bluetooth*) blueman-manager ;;
     *Monitors*) wdisplays ;; # Requires wdisplays or nwg-displays
-    *Hyprland*) open_in_editor "$HOME/.config/hypr/hyprland.conf" ;;
+    *Hyprland*) open_in_editor "$HOME/.config/hypr/hyprland.lua" ;;
     *Walker*) open_in_editor "$HOME/.config/walker/config.toml" ;;
     *Waybar*) pkill -SIGUSR1 waybar ;; # Toggles Waybar visibility
     *) show_main_menu ;;

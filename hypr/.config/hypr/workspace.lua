@@ -19,7 +19,7 @@
 hl.workspace_rule({ workspace = "1", monitor = "DP-5", default = true, persistent = true })
 hl.workspace_rule({ workspace = "2", monitor = "DP-5", persistent = true })
 hl.workspace_rule({ workspace = "3", monitor = "DP-5", persistent = true })
-hl.workspace_rule({ workspace = "4", monitor = "HDMI-A-2", default = true, persistent = true })
+hl.workspace_rule({ workspace = "4", monitor = "HDMI-A-2", persistent = true })
 
 -- See https://wiki.hypr.land/Configuring/Layouts/Dwindle-Layout/ for more
 hl.config({
