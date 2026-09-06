@@ -23,15 +23,16 @@ require("workspace")
 -- Set programs that you use
 local terminal    = "kitty"
 local fileManager = "dolphin"
-local menu        = "walker"
 
+local menu        = "walker"
 
 ---------------------
 ----   SCRIPTS   ----
 ---------------------
-local workspaceWrap    = "~/.config/hypr/scripts/workspace-wrap.sh"
-local powerMenu        = "~/.config/hypr/scripts/power-menu.sh"
-local walkerMenu       = "~/.config/hypr/scripts/arch-menu.sh"
+-- workspace-wrap.sh is superseded by the get_target_ws() logic further down
+-- (and needed jq, which is not installed). Left in the repo for reference.
+local powerMenu   = "~/.config/hypr/scripts/power-menu.sh"
+local archMenu    = "~/.config/hypr/scripts/arch-menu.sh"
 
 
 
@@ -63,7 +64,8 @@ local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 hl.bind(mainMod .. " + RETURN", hl.dsp.exec_cmd("kitty --title fly_is_kitty"))
 local closeWindowBind = hl.bind(mainMod .. " + C", hl.dsp.window.close())
 -- closeWindowBind:set_enabled(false)
-hl.bind(mainMod .. " + M", hl.dsp.exec_cmd(walkerMenu))
+hl.bind(mainMod .. " + M", hl.dsp.exec_cmd(archMenu))
+hl.bind(mainMod .. " + ESCAPE", hl.dsp.exec_cmd(powerMenu))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + F", hl.dsp.window.float({ action = "toggle" }))
 hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(menu))
@@ -134,9 +136,11 @@ hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = tr
 hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = true })
 
-hl.bind("PRINT", hl.dsp.exec_cmd("hyprshot -m window"))
-hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd("hyprshot -m output"))
-hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("hyprshot -m region"))
+-- hyprshot (extra/hyprshot) is not installed; grim + slurp + wl-copy are.
+-- Each bind prefers hyprshot when present and falls back to grim otherwise.
+hl.bind("PRINT",                   hl.dsp.exec_cmd("sh -c 'command -v hyprshot >/dev/null 2>&1 && hyprshot -m window || grim - | wl-copy'"))
+hl.bind(mainMod .. " + Print",     hl.dsp.exec_cmd("sh -c 'command -v hyprshot >/dev/null 2>&1 && hyprshot -m output || grim - | wl-copy'"))
+hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd("sh -c 'command -v hyprshot >/dev/null 2>&1 && hyprshot -m region || grim -g \"$(slurp)\" - | wl-copy'"))
 
 --------------------------------
 ---- WINDOWS AND WORKSPACES ----
@@ -189,18 +193,6 @@ hl.window_rule({
 })
 
 hl.window_rule({
-    no_focus = true,
-    match = {
-        class = "^$",
-        title = "^$",
-        xwayland = true,
-        float = true,
-        fullscreen = false,
-        pin = false
-    }
-})
-
-hl.window_rule({
     monitor = 1,
     min_size = {1152, 648},
     max_size = {1152, 648},
@@ -221,7 +213,7 @@ hl.window_rule({
 hl.window_rule({
     center = true,
     float = true,
-    match = { class = "^(*.exe)$" }
+    match = { class = "^.*\\.exe$" }
 })
 
 hl.window_rule({
@@ -256,13 +248,8 @@ hl.window_rule({
 })
 
 hl.window_rule({
-    monitor = 1,
-    match = { class = "^(steam_app_%d)$" }
-})
-
-hl.window_rule({
     opacity = 0.92,
-    match = { class = "code-oss$" }
+    match = { class = "^(Code|code-oss)$" }
 })
 
 hl.window_rule({

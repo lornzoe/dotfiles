@@ -4,38 +4,76 @@
 
 -- See https://wiki.hypr.land/Configuring/Basics/Autostart/
 
--- Autostart necessary processes (like notifications daemons, status bars, etc.)
--- Or execute your favorite apps at launch like this:
---
--- hl.on("hyprland.start", function () 
---   hl.exec_cmd(terminal)
---   hl.exec_cmd("nm-applet")
---   hl.exec_cmd("waybar & hyprpaper & firefox")
--- end)
+-- Every launch below is guarded with `command -v`, so a machine that is
+-- missing an optional package just skips that line instead of leaving a
+-- dead exec in the session. Keeps one config usable on desktop + laptop.
+local function run_if(bin, cmd, opts)
+    hl.exec_cmd("command -v " .. bin .. " >/dev/null 2>&1 && " .. (cmd or bin), opts)
+end
 
 hl.on("hyprland.start", function()
-    -- Basic Background Processes
-    hl.exec_cmd("sleep 2 && hyprctl reload")
-    hl.exec_cmd("hyprctl setcursor Nordzy-hyprcursors 26")
-    hl.exec_cmd("systemctl --user start hyprpolkitagent")
-    hl.exec_cmd("swww-daemon")
-    hl.exec_cmd("sleep 1 && swww img dotfiles/hypr/.config/hypr/wallpapers/my-neighbor-totoro-sunflowers.png")
-    hl.exec_cmd("waybar")
-    hl.exec_cmd("hyprswitch init &")
-    hl.exec_cmd("elephant")
-    hl.exec_cmd("walker --gapplication-service")
-    hl.exec_cmd("dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=Hyprland")
-    hl.exec_cmd("systemctl --user stop xdg-desktop-portal xdg-desktop-portal-hyprland")
-    hl.exec_cmd("systemctl --user start xdg-desktop-portal-hyprland")
+    ----------------------------------------------------------------
+    -- Session plumbing
+    ----------------------------------------------------------------
+    -- NOTE: no `dbus-update-activation-environment` / portal restart dance
+    -- here. This session is started through uwsm (hyprland-uwsm.desktop),
+    -- which imports the environment and manages xdg-desktop-portal-hyprland
+    -- as a systemd user unit. Doing it manually races the unit and was the
+    -- likely reason the old config needed the `sleep 2 && hyprctl reload`
+    -- band-aid. If you ever launch Hyprland bare from a TTY, re-add it.
 
-    -- Workspace-Specific Autostart
-    -- Lua allows passing a table to hl.exec_cmd for rules like workspace and silent
-    hl.exec_cmd("discord", { workspace = "4" })
-    hl.exec_cmd("steam -silent", { workspace = "2 silent" })
-    
-    -- Focused Startup
+    -- Polkit agent (hyprpolkitagent is not installed; KDE agent is)
+    run_if("/usr/lib/polkit-kde-authentication-agent-1")
+
+    -- Notifications
+    run_if("dunst")
+
+    -- Clipboard history
+    run_if("cliphist", "wl-paste --type text --watch cliphist store")
+    run_if("cliphist", "wl-paste --type image --watch cliphist store")
+
+    ----------------------------------------------------------------
+    -- Wallpaper
+    ----------------------------------------------------------------
+    -- swww was renamed upstream to `awww` (extra/awww). hyprpaper is what
+    -- is actually installed right now, and reads ~/.config/hypr/hyprpaper.conf.
+    hl.exec_cmd([[
+        if command -v awww >/dev/null 2>&1; then
+            awww-daemon & sleep 1
+            awww img "$HOME/.config/hypr/wallpapers/my-neighbor-totoro-sunflowers.png"
+        elif command -v hyprpaper >/dev/null 2>&1; then
+            hyprpaper
+        fi
+    ]])
+
+    ----------------------------------------------------------------
+    -- Bar / launcher
+    ----------------------------------------------------------------
+    run_if("waybar")
+
+    -- elephant is walker's backend daemon and must be up before walker is
+    -- useful. Recent elephant releases ship a systemd user unit; prefer it so
+    -- the daemon survives a compositor restart, and fall back to a bare exec.
+    hl.exec_cmd([==[
+        if systemctl --user cat elephant.service >/dev/null 2>&1; then
+            systemctl --user start elephant.service
+        elif command -v elephant >/dev/null 2>&1; then
+            elephant &
+        fi
+    ]==])
+
+    run_if("walker", "walker --gapplication-service")
+    run_if("hyprswitch", "hyprswitch init")
+
+    ----------------------------------------------------------------
+    -- Applications
+    ----------------------------------------------------------------
+    run_if("vesktop", nil, { workspace = "4" })
+    run_if("steam", "steam -silent", { workspace = "2 silent" })
+
+    run_if("zen-browser", nil, { workspace = "1" })
+    run_if("code", nil, { workspace = "1" })
+    run_if("kitty", "kitty --title fly_is_kitty", { workspace = "1" })
+
     hl.exec_cmd("hyprctl dispatch workspace 1")
-    hl.exec_cmd("zen-browser", { workspace = "1" })
-    hl.exec_cmd("code", { workspace = "1" })
-    hl.exec_cmd("kitty --title fly_is_kitty", { workspace = "1" })
 end)

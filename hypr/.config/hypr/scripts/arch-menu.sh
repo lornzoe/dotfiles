@@ -3,7 +3,8 @@
 # --- CONFIGURATION ---
 # Change these to match your preferred apps
 TERMINAL="kitty"
-EDITOR="nvim"
+# neovim is not installed yet; fall back to vim, which is.
+EDITOR="$(command -v nvim || command -v vim || echo nano)"
 BROWSER="zen-browser"
 FILE_MANAGER="dolphin"
 
@@ -56,9 +57,9 @@ show_main_menu() {
   
   case "${choice,,}" in
     *capture*) show_capture_menu ;;
-    *apps*) walker ;; # Launch standard Walker app drawer
+    *apps*) walker ;;
     *setup*) show_setup_menu ;;
-    *keybindings*) open_in_editor "$HOME/.config/hypr/hyprland.conf" ;; # Adjust path if needed
+    *keybindings*) open_in_editor "$HOME/.config/hypr/hyprland.lua" ;; # Adjust path if needed
     *system*) show_system_menu ;;
   esac
 }
@@ -81,7 +82,7 @@ show_setup_menu() {
     *Wi-Fi*) nm-connection-editor ;; # Or use 'nmtui' if you prefer terminal
     *Bluetooth*) blueman-manager ;;
     *Monitors*) wdisplays ;; # Requires wdisplays or nwg-displays
-    *Hyprland*) open_in_editor "$HOME/.config/hypr/hyprland.conf" ;;
+    *Hyprland*) open_in_editor "$HOME/.config/hypr/hyprland.lua" ;;
     *Walker*) open_in_editor "$HOME/.config/walker/config.toml" ;;
     *Waybar*) pkill -SIGUSR1 waybar ;; # Toggles Waybar visibility
     *) show_main_menu ;;

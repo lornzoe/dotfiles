@@ -14,7 +14,7 @@ hl.config({
 
         sensitivity = 0, -- -1.0 - 1.0, 0 means no modification.
 
-        accel_profile = flat,
+        accel_profile = "flat",
         touchpad = {
             natural_scroll = false,
         },
